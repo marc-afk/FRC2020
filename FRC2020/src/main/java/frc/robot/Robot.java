@@ -110,6 +110,7 @@ public class Robot extends TimedRobot {
 		} else if (OI.shoot() == true) {
 			Shooter.shooterShoot(OI.valueShooterSpeed);
 			shooterCycle = 1;
+			System.out.println("Shooter Initialized");
 		} else {
 			Shooter.shooterStop();
 		}
@@ -117,8 +118,10 @@ public class Robot extends TimedRobot {
 
 		if (shooterCycle == 10){
 			Shooter.initiateShot();
+			System.out.println("Ball fired")
 		} else if (shooterCycle == 20){
 			shooterCycle = 0;
+			System.out.println("Shooter Stopped")
 		}
 		
 

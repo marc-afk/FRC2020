@@ -118,10 +118,10 @@ public class Robot extends TimedRobot {
 
 		if (shooterCycle == 10){
 			Shooter.initiateShot();
-			System.out.println("Ball fired")
+			System.out.println("Ball fired");
 		} else if (shooterCycle == 20){
 			shooterCycle = 0;
-			System.out.println("Shooter Stopped")
+			System.out.println("Shooter Stopped");
 		}
 		
 

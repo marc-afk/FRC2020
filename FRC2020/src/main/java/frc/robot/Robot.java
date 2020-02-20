@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
 	Joystick leftstick = RobotMap.leftJoystick;
 	Joystick rightstick = RobotMap.rightJoystick;
 	DigitalInput limitswitch1 = new DigitalInput(0);
+	DigitalInput limitswitch2 = new DigitalInput(1);
 
 	public static DriveTrain driveTrain;
 	public static OI OI;
@@ -126,6 +127,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Rotations Completed", ColorCycle.colorCycleValue);
 		SmartDashboard.putNumber("Colors Passed", ColorCycle.colorsPassedValue);
 		SmartDashboard.putBoolean("limit switch pressed?", limitswitch1.get());
+		SmartDashboard.putBoolean("limit switch2 pressed?", limitswitch2.get());
 		
 		if (ColorCycle.colorCycleValue == 3) {
 			ColorCycle.colorCycleStop();

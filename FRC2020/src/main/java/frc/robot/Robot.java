@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.Detector;
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot {
 	XboxController xbox = RobotMap.xboxController;
 	Joystick leftstick = RobotMap.leftJoystick;
 	Joystick rightstick = RobotMap.rightJoystick;
+	DigitalInput limitswitch1 = new DigitalInput(0);
 
 	public static DriveTrain driveTrain;
 	public static OI OI;
@@ -123,6 +125,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("ShooterSpeed", OI.valueShooterSpeed);
 		SmartDashboard.putNumber("Rotations Completed", ColorCycle.colorCycleValue);
 		SmartDashboard.putNumber("Colors Passed", ColorCycle.colorsPassedValue);
+		SmartDashboard.putBoolean("limit switch pressed?", limitswitch1.get());
 		
 		if (ColorCycle.colorCycleValue == 3) {
 			ColorCycle.colorCycleStop();

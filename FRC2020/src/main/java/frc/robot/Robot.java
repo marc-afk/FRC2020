@@ -19,6 +19,8 @@ import frc.robot.subsystems.ColorCycle;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 public class Robot extends TimedRobot {
 	XboxController xbox = RobotMap.xboxController;
@@ -34,7 +36,15 @@ public class Robot extends TimedRobot {
 	int shooterCycle = 0;
 	String teamColor;
 	public Timer timer = new Timer();
+	public int ultrasoundport = 0;
 	public int autTime;
+	public final AnalogInput ultrasonic = new AnalogInput(ultrasoundport);
+
+	// factor to convert sensor values to a distance in inches
+	public static final double kValueToInches = 0.125;
+
+
+	
 
 	public final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
 	public final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -51,6 +61,12 @@ public class Robot extends TimedRobot {
 		driveTrain = new DriveTrain();
 		OI = new OI();
 		GreenLED_ON = false;
+
+		
+	
+
+
+		
 
 		RobotMap.colorMatcher.addColorMatch(kBlueTarget);
 		RobotMap.colorMatcher.addColorMatch(kGreenTarget);
@@ -83,13 +99,22 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		timer.start();
-		autTime = 3;
+		autTime = 5;
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		while (timer.get() < autTime){
-			Robot.driveTrain.tankDrive(5, 5); //change speed
+		boolean drive = true;
+		double currentDistance = ultrasonic.getValue() * kValueToInches;
+		
+		if (currentDistance < 12){
+			drive = false;
+		}
+
+		while ((timer.get() < autTime)){
+			if (drive){
+				Robot.driveTrain.tankDrive(5, 5); //change speed
+			}
 		}
 		if (timer.get() > autTime){
 			Robot.driveTrain.stop();

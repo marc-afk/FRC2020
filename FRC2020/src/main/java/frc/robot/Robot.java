@@ -21,6 +21,10 @@ import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.AnalogGyro;
+
 
 public class Robot extends TimedRobot {
 	XboxController xbox = RobotMap.xboxController;
@@ -38,7 +42,9 @@ public class Robot extends TimedRobot {
 	public Timer timer = new Timer();
 	public int ultrasoundport = 0;
 	public int autTime;
+	public int autHeading;
 	public final AnalogInput ultrasonic = new AnalogInput(ultrasoundport);
+	ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kMXP);
 
 	// factor to convert sensor values to a distance in inches
 	public static final double kValueToInches = 0.125;
@@ -100,10 +106,12 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		timer.start();
 		autTime = 5;
+		autHeading = 0;
 	}
 
 	@Override
 	public void autonomousPeriodic() {
+		double error = autHeading-gyro.getRate();
 		boolean drive = true;
 		double currentDistance = ultrasonic.getValue() * kValueToInches;
 		
@@ -113,12 +121,21 @@ public class Robot extends TimedRobot {
 
 		while ((timer.get() < autTime)){
 			if (drive){
-				Robot.driveTrain.tankDrive(5, 5); //change speed
+				Robot.driveTrain.tankDrive(5+error, 5-error); //change speed
 			}
 		}
 		if (timer.get() > autTime){
 			Robot.driveTrain.stop();
 		}
+
+		if (currentDistance < 15){
+			autHeading = 3;
+		} else if (currentDistance < 20){
+			autHeading = 2;
+		} else if (currentDistance < 30){
+			autHeading = 1;
+		}
+		
 
 	}
 
